@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import *
+
+models = [Activity, Entry, ActivityEntry]
+
+for model in models:
+    admin.site.register(model)
