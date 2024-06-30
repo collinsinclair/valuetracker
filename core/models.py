@@ -29,13 +29,14 @@ class Activity(models.Model):
     )
     name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    categories = models.ManyToManyField(Category, related_name="activities")
 
     class Meta:
         verbose_name_plural = "Activities"
 
     def __str__(self):
-        return f"{self.category} / {self.name}"
+        category_names = ", ".join(category.name for category in self.categories.all())
+        return f"{category_names} / {self.name}"
 
 
 class Entry(models.Model):
