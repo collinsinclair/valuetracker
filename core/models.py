@@ -1,8 +1,10 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils.timezone import now
 
 
 class Category(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="categories")
     name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
 
@@ -14,6 +16,7 @@ class Category(models.Model):
 
 
 class Activity(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="activities")
     name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
@@ -26,6 +29,7 @@ class Activity(models.Model):
 
 
 class Entry(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="entries")
     date = models.DateField(default=now)
     activity = models.ForeignKey(Activity, on_delete=models.PROTECT)
     duration = models.DurationField()
