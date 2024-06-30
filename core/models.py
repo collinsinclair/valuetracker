@@ -35,8 +35,7 @@ class Activity(models.Model):
         verbose_name_plural = "Activities"
 
     def __str__(self):
-        category_names = ", ".join(category.name for category in self.categories.all())
-        return f"{category_names} / {self.name}"
+        return self.name
 
 
 class Entry(models.Model):
