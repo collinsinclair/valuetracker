@@ -47,7 +47,7 @@ class Entry(models.Model):
     )
     date = models.DateField(default=now)
     activity = models.ForeignKey(Activity, on_delete=models.PROTECT)
-    duration = models.DurationField()
+    duration = models.IntegerField(help_text="Duration in minutes.")
     notes = models.TextField(null=True, blank=True)
 
     class Meta:
