@@ -6,6 +6,10 @@ from .models import Category, Activity, Entry
 class CategoryAdmin(admin.ModelAdmin):
     exclude = ("user",)
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(user=request.user)
+
     def save_model(self, request, obj, form, change):
         if not obj.pk:
             obj.user = request.user  # Set default user on creation
@@ -15,6 +19,10 @@ class CategoryAdmin(admin.ModelAdmin):
 class ActivityAdmin(admin.ModelAdmin):
     exclude = ("user",)
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(user=request.user)
+
     def save_model(self, request, obj, form, change):
         if not obj.pk:
             obj.user = request.user
@@ -23,6 +31,10 @@ class ActivityAdmin(admin.ModelAdmin):
 
 class EntryAdmin(admin.ModelAdmin):
     exclude = ("user",)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(user=request.user)
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:
