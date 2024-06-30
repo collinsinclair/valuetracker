@@ -1,45 +1,38 @@
-import datetime
-
 from django.db import models
+from django.utils.timezone import now
 
 
-class Activity(models.Model):
+class Category(models.Model):
     name = models.CharField(max_length=100)
-    created = models.DateField(auto_now_add=True)
-    notes = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "Categories"
 
     def __str__(self):
         return self.name
 
+
+class Activity(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+
     class Meta:
-        verbose_name = "Valued Activity"
-        verbose_name_plural = "Valued Activities"
+        verbose_name_plural = "Activities"
+
+    def __str__(self):
+        return f"{self.category} / {self.name}"
 
 
 class Entry(models.Model):
-    date = models.DateField(default=datetime.date.today, unique=True)
+    date = models.DateField(default=now)
+    activity = models.ForeignKey(Activity, on_delete=models.PROTECT)
+    duration = models.DurationField()
     notes = models.TextField(null=True, blank=True)
 
-    def __str__(self):
-        return self.date.strftime("%-d %b %Y")
-
     class Meta:
-        verbose_name = "Journal Entry"
-        verbose_name_plural = "Journal Entries"
-
-
-class ActivityEntry(models.Model):
-    entry = models.ForeignKey(
-        Entry, on_delete=models.CASCADE, related_name="activity_entries"
-    )
-    activity = models.ForeignKey(
-        Activity, on_delete=models.CASCADE, related_name="activity_entries"
-    )
-    notes = models.TextField(null=True, blank=True)
+        verbose_name_plural = "Entries"
 
     def __str__(self):
-        return f"{self.activity.name} on {self.entry.date.strftime('%-d %b %Y')}"
-
-    class Meta:
-        verbose_name = "Activity Entry"
-        verbose_name_plural = "Activity Entries"
+        return f"{self.activity} on {self.date}"
